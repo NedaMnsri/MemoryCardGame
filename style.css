@@ -1,0 +1,42 @@
+body {
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+    background-color: #f7f7f7;
+    text-align: center;
+    background-color: palegreen;
+}
+
+.game-container {
+    max-width: 500px;
+    margin: 30px auto;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+    justify-content: center;
+}
+
+.card {
+    background-color: #ffefd5;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2em;
+    transition: transform 0.3s, background-color 0.3s;
+    aspect-ratio: 1 / 1;
+}
+
+.card:hover {
+    transform: scale(1.05);
+    background-color: #e0e0e0;
+}
+
+.game-info {
+    margin-bottom: 20px;
+}
+
+.timer {
+    font-size: 1.5em;
+    color: #333;
+}

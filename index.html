@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="game-info">
+        <h1>Memory Game</h1>
+        <p>Match the fruit emojis and test your memory!</p>
+        <div class="timer">Time: <span id="time">00:00</span></div>
+    </div>
+    <div class="game-container">
+    </div>
+
+    <script>
+        const fruits = ['🍎', '🍌', '🍇', '🍉', '🍊', '🍓', '🍐', '🍍', '🥥', '🥝', '🍒', '🍑', , '🍋', '🍠'];
+        const gameContainer = document.querySelector('.game-container');
+        let cards = [...fruits, ...fruits];
+        cards.sort(() => 0.5 - Math.random());
+        let firstCard = null;
+        let secondCard = null;
+        let lockBoard = false;
+        let matchedPairs = 0;
+        let timerInterval;
+
+
+        function createCard(cardContent) {
+            const card = document.createElement('div');
+            card.classList.add('card');
+            card.dataset.content = cardContent;
+            card.addEventListener('click', flipCard);
+            return card;
+        }
+
+        function flipCard() {
+            if (lockBoard) return;
+            if (this === firstCard) return;
+
+            this.textContent = this.dataset.content;
+            this.classList.add('is-flipped');
+
+            if (!firstCard) {
+                firstCard = this;
+                return;
+            }
+
+            secondCard = this;
+            checkForMatch();
+        }
+
+        function checkForMatch() {
+            let isMatch = firstCard.dataset.content === secondCard.dataset.content;
+
+            isMatch ? disableCards() : unflipCards();
+        }
+
+        function disableCards() {
+            firstCard.removeEventListener('click', flipCard);
+            secondCard.removeEventListener('click', flipCard);
+            matchedPairs++;
+            resetBoard();
+            if (matchedPairs === fruits.length) {
+                clearInterval(timerInterval);
+                alert('Congratulations! You\'ve matched all the fruits!');
+            }
+        }
+
+        function unflipCards() {
+            lockBoard = true;
+            setTimeout(() => {
+                firstCard.textContent = '';
+                secondCard.textContent = '';
+                resetBoard();
+            }, 1500);
+        }
+
+        function resetBoard() {
+            [firstCard, secondCard, lockBoard] = [null, null, false];
+        }
+
+        function startTimer() {
+            const timerDisplay = document.getElementById('time');
+            let time = 0;
+            timerInterval = setInterval(() => {
+                time++;
+                const minutes = Math.floor(time / 60);
+                const seconds = time % 60;
+                timerDisplay.textContent = minutes.toString().padStart(2, '0') + ':' + seconds.toString().padStart(2, '0');
+            }, 1000);
+        }
+        cards.forEach((fruit) => {
+            const cardElement = createCard(fruit);
+            gameContainer.appendChild(cardElement);
+        });
+
+        startTimer();
+    </script>
+</body>
+
+</html>
